@@ -1,0 +1,8 @@
+// Purpose:
+//    - detect when poswershell history is deleted
+//    - Threat Actors tend to delete this to hide tracks
+DeviceFileEvents
+| where Timestamp > now() - 30m
+| where ActionType == "FileDeleted"
+    and (FolderPath contains "AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadLine\\ConsoleHost_history.txt"
+        or FolderPath contains "AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadLine\\Windows PowerShell ISE Host_history.txt")
