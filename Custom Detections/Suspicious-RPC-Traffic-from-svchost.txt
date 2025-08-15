@@ -1,0 +1,11 @@
+// Purpose:
+//    - Detect RPC anomolous RPC traffic from svchost
+//    - Could be an indicator of lateral movement commonly identified by SC CIC during Incident Response Investigations
+DeviceNetworkEvents
+| where Timestamp > now() - 30m
+| where InitiatingProcessFileName == "svchost.exe"
+    and RemotePort == "135"
+    and ActionType == "ConnectionSuccess"
+    and RemoteIP != "<Domain Controller IP>"
+    and not(InitiatingProcessCommandLine contains "GPSvcGroup") //False Positive
+    and not(InitiatingProcessCommandLine contains "RPCSS") //False Positive
