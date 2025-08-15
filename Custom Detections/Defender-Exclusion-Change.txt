@@ -1,0 +1,7 @@
+// Purpose:
+//    - Detects the addition of Defender Exclusions
+//    - Commonly used by threat actors to enable use of tools and encryptors
+DeviceRegistryEvents
+| where Timestamp > now() - 30m
+| where ActionType == "RegistryValueSet"
+    and RegistryKey == "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Defender\\Exclusions\\Paths"
