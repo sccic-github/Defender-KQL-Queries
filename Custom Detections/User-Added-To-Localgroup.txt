@@ -1,0 +1,8 @@
+// Purpose:
+//    - Detects when users are added to localgroup 
+//    - Threat Actors commonly add a user they create to Administrators and Remote Desktop Users for persistence
+DeviceProcessEvents
+| where Timestamp > now() - 30m
+| where ProcessCommandLine contains "net"
+    and ProcessCommandLine contains "localgroup"
+    and ProcessCommandLine contains "add"
