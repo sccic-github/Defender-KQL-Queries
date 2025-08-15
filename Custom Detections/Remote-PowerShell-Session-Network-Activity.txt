@@ -1,0 +1,11 @@
+// Purpose:
+//    - Detects the use of remote powershell activity
+//    - Commonly used for lateral movement, including PsExec
+// False Positives:
+//    - Windows Defender
+//    - IT Admin activity
+DeviceNetworkEvents
+| where Timestamp > now() - 30m
+| where (RemotePort == "5985" or RemotePort == "5986")
+    and InitiatingProcessFileName == "powershell.exe"
+    and not(InitiatingProcessCommandLine contains "Windows defender") //False Positive
